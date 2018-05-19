@@ -13,3 +13,7 @@ type IAPI interface {
 type ISpendInfoDAO interface {
 	GetSpendInfoBefore(dt time.Time) ([]*entities.SpendInfo, error)
 }
+
+type ILogger interface {
+	LogInfo(message string)
+}

@@ -7,10 +7,12 @@ import (
 type ServerConfig struct {
 	URL       string `mapstructure:"url"`
 	AuthToken string `mapstructure:"auth_token"`
+	Debug     bool   `mapstructure:"debug"`
 }
 
 type DataConfig struct {
 	DBPath string `mapstructure:"db_path"`
+	ChatID int    `mapstructure:"chat_id"`
 }
 
 type Config struct {

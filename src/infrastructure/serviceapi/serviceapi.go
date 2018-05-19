@@ -83,14 +83,6 @@ func (a *API) GetLastSpendInfo() (*entities.SpendInfo, error) {
 		return nil, err
 	}
 
-	if response == nil {
-		return nil, interfaces.ErrBadApiResponse
-	}
-
-	if response.Infos == nil {
-		return nil, interfaces.ErrBadApiResponse
-	}
-
 	if len(response.Infos) < 1 {
 		return nil, interfaces.ErrApiNoInfo
 	}

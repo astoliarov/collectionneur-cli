@@ -7,6 +7,7 @@ import (
 	"collectionneur-cli/src/infrastructure/config"
 	"collectionneur-cli/src/infrastructure/dao"
 	"collectionneur-cli/src/infrastructure/serviceapi"
+	"collectionneur-cli/src/infrastructure/utils"
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/spf13/cobra"
@@ -19,6 +20,7 @@ type CLIApp struct {
 	loadAndSendSpendInfoUseCase *usecases.LoadAndSendSpendInfoUseCase
 	spendInfoDAO                interfaces.ISpendInfoDAO
 	api                         interfaces.IAPI
+	logger                      interfaces.ILogger
 
 	rootCmd *cobra.Command
 }
@@ -39,6 +41,7 @@ func NewCLIApp() (*CLIApp, error) {
 	}
 
 	app := &CLIApp{}
+	app.logger = utils.NewLogger(config.Server.Debug)
 
 	db, err := sql.Open("sqlite3", config.Data.DBPath)
 	if err != nil {
@@ -50,11 +53,12 @@ func NewCLIApp() (*CLIApp, error) {
 		return nil, err
 	}
 
-	spendInfoDAO := dao.NewSpendInfoDAO(db, 4)
+	spendInfoDAO := dao.NewSpendInfoDAO(db, config.Data.ChatID)
 	loadAndSendSpendInfoUseCase := usecases.NewLoadAndSendSpendInfoUseCase(
 		api,
 		spendInfoDAO,
 		location,
+		app.logger,
 	)
 
 	app.spendInfoDAO = spendInfoDAO
